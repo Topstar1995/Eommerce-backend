@@ -16,7 +16,7 @@ class CorsMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $origin = $request->headers->get('origin');
-        $allowedOrigins = ['*'];
+        $allowedOrigins = ['*', 'https://ecommerce-frontend-tau-swart.vercel.app/'];
 
         $response = $next($request);
 
