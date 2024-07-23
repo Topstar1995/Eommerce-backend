@@ -15,6 +15,9 @@ use App\Http\Controllers\OrderController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/health', function () {
+    return response()->json(['status' => 'OK'], 200);
+});
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
