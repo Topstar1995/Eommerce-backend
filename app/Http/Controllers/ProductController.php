@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Product;
@@ -9,7 +10,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return Product::all();
+        return Product::where('supplier_id', Auth::id())->get();
     }
 
     public function store(Request $request)
@@ -34,14 +35,13 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-
+        $product = Product::where('supplier_id', Auth::id())->findOrFail($id);
         return response()->json($product);
     }
 
     public function update(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::where('supplier_id', Auth::id())->findOrFail($id);
 
         $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -57,9 +57,17 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::where('supplier_id', Auth::id())->findOrFail($id);
         $product->delete();
 
         return response()->json(['message' => 'Product deleted successfully']);
+    }
+
+    public function orders($id)
+    {
+        $product = Product::where('supplier_id', Auth::id())->findOrFail($id);
+        $orders = $product->orderItems()->with('order.user')->get();
+
+        return response()->json($orders);
     }
 }
